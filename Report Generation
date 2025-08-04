@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Food Safety Evaluation Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #f5f8fa;
+      margin: 0;
+      padding: 40px 0;
+      color: #223347;
+    }
+    .form-container {
+      background: #fff;
+      max-width: 980px;
+      margin: auto;
+      padding: 2.5rem 3rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(50, 90, 160, 0.1);
+      box-sizing: border-box;
+    }
+    h2 {
+      font-weight: 700;
+      font-size: 1.9rem;
+      color: #154078;
+      margin-bottom: 0;
+      text-align: center;
+    }
+    h3.subtitle {
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: #2c425c;
+      margin: 8px 0 2.5rem;
+      text-align: center;
+    }
+    .form-sections {
+      display: flex;
+      gap: 3rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .section {
+      background: #f9fbff;
+      border-radius: 14px;
+      box-shadow: 0 1px 12px rgba(37, 120, 176, 0.1);
+      padding: 2rem 2.2rem;
+      flex: 1 1 420px;
+      min-width: 320px;
+      box-sizing: border-box;
+    }
+    .section h4 {
+      font-weight: 700;
+      color: #2260a4;
+      font-size: 1.25rem;
+      margin-bottom: 1.2rem;
+      border-bottom: 2px solid #bbe0ff;
+      padding-bottom: 0.3rem;
+      cursor: default;
+      user-select: none;
+    }
+    .collapsible-header {
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      user-select: none;
+    }
+    .toggle-icon {
+      font-size: 1.25rem;
+      transition: transform 0.3s ease;
+    }
+    .collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+    .collapsible-content {
+      max-height: 10000px;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .collapsible-content.collapsed {
+      max-height: 0;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+    .form-group {
+      margin-bottom: 1.15rem;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #274865;
+      margin-bottom: 0.35rem;
+      user-select: none;
+    }
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 0.5rem 0.8rem;
+      border-radius: 10px;
+      border: 1.4px solid #c4d0e0;
+      background: #f7fbff;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #2c6cd3;
+      box-shadow: 0 0 6px rgba(44, 108, 211, 0.3);
+      outline: none;
+      background: #f0f6ff;
+    }
+    textarea#remarks {
+      min-height: 5.2em;
+    }
+    .signature-section {
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.6rem;
+      justify-content: center;
+    }
+    .signature-block {
+      flex: 1 1 300px;
+      background: #e9f1ff;
+      border-radius: 12px;
+      padding: 1rem 1.4rem 1.3rem;
+      box-shadow: inset 0 0 8px rgba(50, 90, 160, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .signature-label {
+      font-weight: 600;
+      color: #1f3c72;
+      margin-bottom: 0.6rem;
+      font-size: 1.05rem;
+    }
+    .signature-area {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+    }
+    canvas.signature-canvas {
+      border-radius: 6px;
+      background: #f9fbff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      width: 170px;
+      height: 55px;
+      cursor: crosshair;
+      flex-shrink: 0;
+    }
+    input.signature-print {
+      font-size: 1rem;
+      flex-grow: 1;
+      min-width: 140px;
+      padding: 0.48rem 0.6rem;
+      border-radius: 10px;
+      border: 1.3px solid #a8bcd6;
+      background: #f0f5ff;
+      transition: border-color 0.25s ease;
+    }
+    input.signature-print:focus {
+      border-color: #2c6cd3;
+      background: #e7f0ff;
+      outline: none;
+    }
+    button.clear-btn {
+      background: #dbe7ff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.38rem 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: #244e99;
+      box-shadow: 0 2px 6px rgba(36, 110, 163, 0.25);
+      transition: background-color 0.3s ease;
+      flex-shrink: 0;
+      height: 36px;
+      user-select: none;
+    }
+    button.clear-btn:hover {
+      background-color: #a4c0ff;
+    }
+    button[type="submit"] {
+      display: block;
+      width: 260px;
+      margin: 0 auto;
+      background: linear-gradient(90deg, #246ea3 60%, #5daed7 100%);
+      color: white;
+      font-weight: 700;
+      font-size: 1.18rem;
+      padding: 0.9rem 0;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 3px 18px rgba(92, 158, 224, 0.6);
+      letter-spacing: 1.4px;
+      transition: background 0.25s ease, box-shadow 0.25s ease;
+      user-select: none;
+    }
+    button[type="submit"]:hover {
+      background: linear-gradient(90deg, #154078 60%, #4487be 100%);
+      box-shadow: 0 3px 24px rgba(41, 88, 144, 0.85);
+    }
+    .items-container {
+      margin-bottom: 2rem;
+    }
+    .item-row {
+      margin-bottom: 1.4rem;
+      border-bottom: 1px solid #dbe9f5;
+      padding-bottom: 0.8rem;
+    }
+    .item-desc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+      color: #1f3c72;
+    }
+    .priority-badge {
+      border-radius: 8px;
+      padding: 2px 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      user-select: none;
+      flex-shrink: 0;
+      min-width: 35px;
+      text-align: center;
+    }
+    .priority-badge.nc { background: #ffe066; color: #746100; border: 1.5px solid #ffe066; }
+    .priority-badge.cv { background: #ffab40; color: #7b4100; border: 1.5px solid #ffab40; }
+    .priority-badge.ma { background: #ff4f4f; color: #750000; border: 1.5px solid #ff4f4f; }
+    .item-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+    select.status-dropdown {
+      padding: 0.3rem 0.6rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1.4px solid #a9bad9;
+      background: #f0f5ff;
+      min-width: 110px;
+    }
+    label.checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-weight: 600;
+      user-select: none;
+      font-size: 0.95rem;
+      color: #274865;
+    }
+    textarea.comment-box {
+      width: 100%;
+      font-family: inherit;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1.4px solid #c4d0e0;
+      background: #f7fbff;
+      min-height: 3.8em;
+      padding: 0.5rem 0.8rem;
+      resize: vertical;
+      box-sizing: border-box;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    textarea.comment-box:focus {
+      border-color: #2c6cd3;
+      box-shadow: 0 0 6px rgba(44, 108, 211, 0.3);
+      outline: none;
+      background: #f0f6ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container" role="main" aria-label="Food Safety Evaluation Form">
+    <h2>PONO SAFETY SOLUTIONS</h2>
+    <h3 class="subtitle">Retail Food Safety Evaluation Report</h3>
+    <form id="inspectionForm" autocomplete="off" novalidate>
+      <div class="form-sections">
+        <section class="section" aria-labelledby="establishment-info-header">
+          <h4 id="establishment-info-header">Establishment Information</h4>
+          <div class="form-group"><label for="estName">Est. Name</label><input type="text" id="estName" name="estName" /></div>
+          <div class="form-group"><label for="address">Address</label><input type="text" id="address" name="address" /></div>
+          <div class="form-group"><label for="estType">Est. Type</label><input type="text" id="estType" name="estType" /></div>
+          <div class="form-group"><label for="riskCategory">Risk Category</label><input type="text" id="riskCategory" name="riskCategory" /></div>
+          <div class="form-group"><label for="permit">Permit No.</label><input type="text" id="permit" name="permit" /></div>
+          <div class="form-group"><label for="owner">Owner Name</label><input type="text" id="owner" name="owner" /></div>
+        </section>
+        <section class="section" aria-labelledby="evaluation-info-header">
+          <h4 id="evaluation-info-header">Evaluation Information</h4>
+          <div class="form-group"><label for="evalDate">Date of Evaluation</label><input type="date" id="evalDate" name="evalDate" /></div>
+          <div class="form-group"><label for="followUp">Follow-up Date</label><input type="date" id="followUp" name="followUp" /></div>
+          <!-- ADJUSTED FIELD BELOW: -->
+          <div class="form-group">
+            <label for="evalType">Evaluation Type</label>
+            <select id="evalType" name="evalType">
+              <option value=""></option>
+              <option value="Routine">Routine</option>
+              <option value="Follow-up">Follow-up</option>
+              <option value="General Complaint">General Complaint</option>
+              <option value="Foodborne Illness">Foodborne Illness</option>
+              <option value="General Investigation">General Investigation</option>
+              <option value="Pre-Op">Pre-Op</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="grade">Grade/Score</label>
+            <select id="grade" name="grade">
+              <option value=""></option>
+              <option value="Green">Green</option>
+              <option value="Yellow">Yellow</option>
+              <option value="Red">Red</option>
+              <option value="No Grade Issued">No Grade Issued</option>
+            </select>
+          </div>
+          <div class="signature-section">
+            <div class="signature-block">
+              <span class="signature-label">Print Name and Signature of Person in Charge:</span>
+              <div class="signature-area">
+                <canvas id="picSignature" class="signature-canvas" aria-label="Person in Charge Signature Pad"></canvas>
+                <input type="text" id="pic" class="signature-print" placeholder="Print Name" name="pic" />
+                <button type="button" class="clear-btn" onclick="clearSignature('picSignature')" aria-label="Clear Person in Charge Signature">Clear</button>
+              </div>
+            </div>
+            <div class="signature-block">
+              <span class="signature-label">Print Name and Signature of Food Safety Advisor:</span>
+              <div class="signature-area">
+                <canvas id="fsaSignature" class="signature-canvas" aria-label="Food Safety Advisor Signature Pad"></canvas>
+                <input type="text" id="fsa" class="signature-print" placeholder="Print Name" name="fsa" />
+                <button type="button" class="clear-btn" onclick="clearSignature('fsaSignature')" aria-label="Clear Food Safety Advisor Signature">Clear</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <section class="section" aria-labelledby="fbi-header">
+        <h4 id="fbi-header" tabindex="0" role="button" aria-expanded="true" aria-controls="fbi-content" class="collapsible-header">
+          Foodborne Illness Risk Factors and Public Health Interventions (FBI)
+          <span class="toggle-icon">▼</span>
+        </h4>
+        <div id="fbi-content" class="collapsible-content">
+          <div id="fbi-items" class="items-container"></div>
+        </div>
+      </section>
+      <section class="section" aria-labelledby="grp-header">
+        <h4 id="grp-header" tabindex="0" role="button" aria-expanded="true" aria-controls="grp-content" class="collapsible-header">
+          Good Retail Practices (GRP)
+          <span class="toggle-icon">▼</span>
+        </h4>
+        <div id="grp-content" class="collapsible-content">
+          <div id="grp-items" class="items-container"></div>
+        </div>
+      </section>
+      <section class="remarks-section" aria-labelledby="remarks-label" style="margin-bottom: 2.5rem;">
+        <label id="remarks-label" for="remarks">Remarks / Observations:</label>
+        <textarea id="remarks" name="remarks" rows="4" placeholder="Enter remarks or observations here..."></textarea>
+      </section>
+      <div style="text-align:center;">
+        <button type="submit" aria-label="Download Food Safety Evaluation PDF">Download PDF</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    // --- Inspection Items (FBI and GRP) ---
+    const inspectionItems = [
+      // FBI (1-27)
+      {id:1, desc:"Person in charge present, demonstrates knowledge, and performs duties", statuses:["","IN","OUT"], priority:"NC"},
+      {id:2, desc:"Management awareness; policy present", statuses:["","IN","OUT"], priority:"CV"},
+      {id:3, desc:"Proper use of reporting, restriction & exclusion", statuses:["","IN","OUT"], priority:"MA"},
+      {id:4, desc:"Proper eating, tasting, drinking, or tobacco use", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:5, desc:"No discharge from eyes, nose, and mouth", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:6, desc:"Hands clean and properly washed", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:7, desc:"No barehand contact with ready-to-eat foods or approved alternate method used", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:8, desc:"Adequate handwashing facilities supplied and easily accessible", statuses:["","IN","OUT"], priority:"CV"},
+      {id:9, desc:"Food obtained from an approved source", statuses:["","IN","OUT"], priority:"MA"},
+      {id:10, desc:"Food received at proper temperature", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:11, desc:"Food in good condition, safe, and unadulterated", statuses:["","IN","OUT"], priority:"CV"},
+      {id:12, desc:"Required records available: shellstock tags, parasite destruction", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:13, desc:"Food separated and protected", statuses:["","IN","OUT","N/A"], priority:"CV"},
+      {id:14, desc:"Food-contact surfaces: cleaned and sanitized", statuses:["","IN","OUT","N/A"], priority:"CV"},
+      {id:15, desc:"Proper disposition of returned, previously served, reconditioned, and unsafe food", statuses:["","IN","OUT"], priority:"CV"},
+      {id:16, desc:"Proper cooking time and temperatures", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:17, desc:"Proper reheating procedures for hot holding", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:18, desc:"Proper cooling time and temperatures", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:19, desc:"Proper hot holding temperatures", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:20, desc:"Proper cold holding temperatures", statuses:["","IN","OUT","N/A"], priority:"CV"},
+      {id:21, desc:"Proper date marking and disposition", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:22, desc:"Time as a public health control: procedures & records", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      {id:23, desc:"Consumer advisory provided for raw or undercooked foods and allergens", statuses:["","IN","OUT","N/A"], priority:"NC"},
+      {id:24, desc:"Pasteurized foods used; prohibited foods not offered", statuses:["","IN","OUT","N/A"], priority:"MA"},
+      {id:25, desc:"Food additives: approved and properly used", statuses:["","IN","OUT","N/A"], priority:"MA"},
+      {id:26, desc:"Toxic substances properly identified, stored, and used", statuses:["","IN","OUT"], priority:"CV"},
+      {id:27, desc:"Compliance with variance, specialized process, and HACCP plan", statuses:["","IN","OUT","N/A","N/O"], priority:"CV"},
+      // GRP (28-54, only "" and "OUT" statuses)
+      {id:28, desc:"Pasteurized eggs used where required", statuses:["","OUT"], priority:"CV"},
+      {id:29, desc:"Water and ice from approved source", statuses:["","OUT"], priority:"MA"},
+      {id:30, desc:"Variance obtained for specialized processing methods", statuses:["","OUT"], priority:"CV"},
+      {id:31, desc:"Proper cooling methods used; adequate equipment for temperature control", statuses:["","OUT"], priority:"CV"},
+      {id:32, desc:"Plant food properly cooked for hot holding", statuses:["","OUT"], priority:"CV"},
+      {id:33, desc:"Approved thawing methods used", statuses:["","OUT"], priority:"CV"},
+      {id:34, desc:"Thermometer provided and accurate", statuses:["","OUT"], priority:"NC"},
+      {id:35, desc:"Food properly labeled; original container", statuses:["","OUT"], priority:"NC"},
+      {id:36, desc:"Insects, rodents, and animals not present", statuses:["","OUT"], priority:"CV"},
+      {id:37, desc:"Contamination prevented during food preparation, storage, and display", statuses:["","OUT"], priority:"CV"},
+      {id:38, desc:"Personal cleanliness", statuses:["","OUT"], priority:"CV"},
+      {id:39, desc:"Wiping cloths: properly used and stored", statuses:["","OUT"], priority:"NC"},
+      {id:40, desc:"Washing fruits and vegetables", statuses:["","OUT"], priority:"CV"},
+      {id:41, desc:"In-use utensils: properly stored", statuses:["","OUT"], priority:"CV"},
+      {id:42, desc:"Utensils, equipment & linens: properly stored, dried, & handled", statuses:["","OUT"], priority:"CV"},
+      {id:43, desc:"Single-use & single-service articles: properly stored & used", statuses:["","OUT"], priority:"CV"},
+      {id:44, desc:"Gloves used properly", statuses:["","OUT"], priority:"CV"},
+      {id:45, desc:"Food & non-food contact surfaces cleanable, properly designed, constructed, & used", statuses:["","OUT"], priority:"CV"},
+      {id:46, desc:"Warewashing facilities: installed, maintained, & used; test strips", statuses:["","OUT"], priority:"NC"},
+      {id:47, desc:"Non-food contact surfaces clean", statuses:["","OUT"], priority:"NC"},
+      {id:48, desc:"Hot & cold water available; adequate pressure", statuses:["","OUT"], priority:"CV"},
+      {id:49, desc:"Plumbing installed; proper backflow devices", statuses:["","OUT"], priority:"NC"},
+      {id:50, desc:"Sewage & waste water properly disposed", statuses:["","OUT"], priority:"CV"},
+      {id:51, desc:"Toilet facilities: properly constructed, supplied, & cleaned", statuses:["","OUT"], priority:"NC"},
+      {id:52, desc:"Garbage & refuse properly disposed; facilities maintained", statuses:["","OUT"], priority:"NC"},
+      {id:53, desc:"Physical facilities installed, maintained, & clean", statuses:["","OUT"], priority:"NC"},
+      {id:54, desc:"Adequate ventilation & lighting; designated areas used.", statuses:["","OUT"], priority:"NC"},
+    ];
+
+    // Helpers for rendering dropdowns and items
+    function createStatusOptions(statuses) {
+      let options = `<option value=""></option>`;
+      for (const s of statuses) {
+        if(s) options += `<option value="${s}">${s}</option>`;
+      }
+      return options;
+    }
+    function renderItems(items, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      for(const item of items) {
+        const statusOptions = createStatusOptions(item.statuses);
+        container.innerHTML += `
+          <div class="item-row" data-id="${item.id}">
+            <div class="item-desc-row">
+              <span>${item.id}. ${item.desc}</span>
+              <span class="priority-badge ${item.priority.toLowerCase()}">${item.priority}</span>
+            </div>
+            <div class="item-controls">
+              <select name="status-${item.id}" class="status-dropdown" aria-label="Status for item ${item.id}">
+                ${statusOptions}
+              </select>
+              <label class="checkbox-label"><input type="checkbox" name="cos-${item.id}" /> COS</label>
+              <label class="checkbox-label"><input type="checkbox" name="r-${item.id}" /> R</label>
+            </div>
+            <textarea name="comment-${item.id}" class="comment-box" placeholder="Comments for item ${item.id}"></textarea>
+          </div>`;
+      }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const fbiItems = inspectionItems.filter(i => i.id <= 27);
+      const grpItems = inspectionItems.filter(i => i.id >= 28);
+      renderItems(fbiItems, "fbi-items");
+      renderItems(grpItems, "grp-items");
+      // Setup collapsibles for FBI and GRP
+      document.querySelectorAll('.collapsible-header').forEach(header => {
+        header.addEventListener('click', () => {
+          const contentId = header.getAttribute('aria-controls');
+          const content = document.getElementById(contentId);
+          const isCollapsed = content.classList.toggle('collapsed');
+          header.setAttribute('aria-expanded', !isCollapsed);
+          header.classList.toggle('collapsed', isCollapsed);
+        });
+        header.addEventListener('keydown', e => {
+          if(e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            header.click();
+          }
+        });
+      });
+      initSignaturePad("picSignature", 170, 55);
+      initSignaturePad("fsaSignature", 170, 55);
+    });
+    function setupHiDPICanvas(canvas, w, h) {
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = w * ratio;
+      canvas.height = h * ratio;
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+    }
+    function initSignaturePad(canvasId, w = 170, h = 55) {
+      const canvas = document.getElementById(canvasId);
+      setupHiDPICanvas(canvas, w, h);
+      const ctx = canvas.getContext("2d");
+      let drawing = false, last = {};
+      function getPoint(e) {
+        const rect = canvas.getBoundingClientRect();
+        if (e.touches && e.touches.length) {
+          return { x: (e.touches[0].clientX - rect.left), y: (e.touches[0].clientY - rect.top) };
+        } else {
+          return { x: (e.offsetX !== undefined) ? e.offsetX : (e.clientX - rect.left), y: (e.offsetY !== undefined) ? e.offsetY : (e.clientY - rect.top) };
+        }
+      }
+      canvas.addEventListener("mousedown", e => { drawing = true; last = getPoint(e); });
+      canvas.addEventListener("mousemove", e => {
+        if (drawing) {
+          const pt = getPoint(e);
+          ctx.beginPath();
+          ctx.moveTo(last.x, last.y);
+          ctx.lineTo(pt.x, pt.y);
+          ctx.strokeStyle = "#1d4063";
+          ctx.stroke();
+          last = pt;
+        }
+      });
+      ["mouseup", "mouseleave"].forEach(ev => { canvas.addEventListener(ev, () => drawing = false); });
+      canvas.addEventListener("touchstart", function(e) { e.preventDefault(); drawing = true; last = getPoint(e); });
+      canvas.addEventListener("touchmove", function(e) {
+        if (!drawing) return;
+        e.preventDefault();
+        const pt = getPoint(e);
+        ctx.beginPath();
+        ctx.moveTo(last.x, last.y);
+        ctx.lineTo(pt.x, pt.y);
+        ctx.strokeStyle = "#1d4063";
+        ctx.stroke();
+        last = pt;
+      });
+      ["touchend", "touchcancel"].forEach(ev => { canvas.addEventListener(ev, () => drawing = false); });
+    }
+    function clearSignature(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- PDF logic is below, as in previous messages -->
+  <script>
+// Subcategories (unchanged)
+const fbiSubcats = [
+  { sub: "Supervision", ids: [1] },
+  { sub: "Employee Health", ids: [2,3] },
+  { sub: "Good Hygienic Practices", ids: [4,5] },
+  { sub: "Preventing Contamination by Hands", ids: [6,7,8] },
+  { sub: "Approved Source", ids: [9,10,11,12] },
+  { sub: "Protection From Contamination", ids: [13,14,15] },
+  { sub: "Potentially Hazardous Food (TCS Food)", ids: [16,17,18,19,20,21,22] },
+  { sub: "Consumer Advisory", ids: [23] },
+  { sub: "Highly Susceptible Populations", ids: [24] },
+  { sub: "Chemical", ids: [25,26] },
+  { sub: "Conformance with Approved Procedures", ids: [27] }
+];
+const grpSubcatsLeft = [
+  { sub: "Safe Food and Water", ids: [28,29,30] },
+  { sub: "Food Temperature Control", ids: [31,32,33,34] },
+  { sub: "Food Identification", ids: [35] },
+  { sub: "Prevention of Food Contamination", ids: [36,37,38,39,40] },
+];
+const grpSubcatsRight = [
+  { sub: "Proper Use of Utensils", ids: [41,42,43,44] },
+  { sub: "Utensils, Equipment and Vending", ids: [45,46,47] },
+  { sub: "Physical Facilities", ids: [48,49,50,51,52,53,54] }
+];
+
+document.getElementById('inspectionForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'legal' });
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const margin = 18;
+  const fontMain = "helvetica";
+
+  // Data
+  const estFields = [
+    { label: "Est. Name", val: document.getElementById('estName').value || '' },
+    { label: "Address", val: document.getElementById('address').value || '' },
+    { label: "Est. Type", val: document.getElementById('estType').value || '' },
+    { label: "Risk Category", val: document.getElementById('riskCategory').value || '' },
+    { label: "Permit No.", val: document.getElementById('permit').value || '' },
+    { label: "Owner Name", val: document.getElementById('owner').value || '' }
+  ];
+  const evalFields = [
+    { label: "Date of Evaluation", val: document.getElementById('evalDate').value || '' },
+    { label: "Follow-up Date", val: document.getElementById('followUp').value || '' },
+    { label: "Evaluation Type", val: document.getElementById('evalType').value || '' },
+    { label: "Grade/Score", val: document.getElementById('grade').value || '' },
+    { label: "Person in Charge", val: document.getElementById('pic').value || '' },
+    { label: "Food Safety Advisor", val: document.getElementById('fsa').value || '' }
+  ];
+  const picPrint = document.getElementById('pic').value || '';
+  const fsaPrint = document.getElementById('fsa').value || '';
+  const remarks = (document.getElementById('remarks').value || "").trim();
+  const items = typeof inspectionItems !== "undefined" ? inspectionItems : window.inspectionItems;
+
+  function getItemData(id) {
+    return {
+      status: document.querySelector(`[name="status-${id}"]`)?.value || "",
+      cos: document.querySelector(`[name="cos-${id}"]`)?.checked || false,
+      r: document.querySelector(`[name="r-${id}"]`)?.checked || false,
+      comment: document.querySelector(`[name="comment-${id}"]`)?.value || ""
+    };
+  }
+
+  function prioColor(prio) {
+    if(prio==="NC") return [168,123,0]; // gold
+    if(prio==="CV") return [180,70,4]; // orange
+    if(prio==="MA") return [175,0,0];  // red
+    return [130,130,130];
+  }
+
+  // --- Header/footer (with Grade/Score coloring) ---
+  function drawHeaderFooter(doc, page, pageCount) {
+    doc.setFillColor(36, 110, 163);
+    doc.rect(0, 0, pageWidth, 46, 'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(14);
+    doc.setFont(fontMain,'bold');
+    doc.text("PONO SAFETY SOLUTIONS", 20, 23);
+    doc.setFont(fontMain, 'bolditalic');
+    doc.setFontSize(10);
+    doc.text("Retail Food Safety Evaluation Report", 20, 38);
+    doc.setFont(fontMain,'bolditalic');
+    doc.setFontSize(9);
+    doc.text(`Page ${page} of ${pageCount}`, pageWidth - 40, 28, {align: "right"});
+
+    // Info card (slightly darker blue)
+    const cardX = margin, cardY = 55, cardW = pageWidth - margin * 3, cardH = 85, cardPadX = 16, cardPadY = 8, colWidth = (cardW - cardPadX * 3) / 2;
+    doc.setFillColor(220, 230, 245); // slightly darker blue
+    doc.roundedRect(cardX, cardY, cardW, cardH, 8, 8, 'F');
+    const headerHeight = 22;
+    // No background for headers, just text
+    doc.setFont(fontMain, 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(31, 44, 90);
+
+    // Move headers and content higher up in the card (more top padding)
+    const contentYStart = cardY + 14;
+    doc.text("Establishment Information", cardX + cardPadX + 4, contentYStart);
+    doc.text("Evaluation Information", cardX + cardPadX * 2 + colWidth + 4, contentYStart);
+
+    function drawFields(fields, startX, startY, maxHeight) {
+      const lineHeight = 7, fieldSpacing = 4; let y = startY;
+      for(let i=0; i < fields.length; i++) {
+        const f = fields[i];
+        doc.setFont(fontMain, 'bold'); 
+        doc.setFontSize(6.5);
+        doc.setTextColor(44,58,77);
+        const labelText = f.label + ": "; 
+        let labelWidth = doc.getTextWidth(labelText);
+        let availableWidth = colWidth - labelWidth - 4;
+        let valLines = doc.splitTextToSize(f.val, availableWidth);
+        doc.text(labelText, startX, y);
+
+        doc.setFont(fontMain, 'normal');
+        if (f.label === "Grade/Score") {
+          let v = (f.val || "").trim();
+          if (v === "Green") {
+            doc.setTextColor(20,160,60);
+            doc.setFont(fontMain, 'bold');
+          } else if (v === "Yellow") {
+            doc.setTextColor(220,160,20);
+            doc.setFont(fontMain, 'bold');
+          } else if (v === "Red") {
+            doc.setTextColor(200,32,45);
+            doc.setFont(fontMain, 'bold');
+          } else {
+            doc.setTextColor(44,58,77);
+          }
+        } else {
+          doc.setTextColor(44,58,77);
+        }
+        doc.text(valLines[0], startX + labelWidth, y);
+
+        for(let j=1; j < valLines.length; j++) {
+          y += lineHeight; 
+          doc.text(valLines[j], startX + labelWidth, y);
+        }
+        y += lineHeight + fieldSpacing;
+      }
+      return y;
+    }
+
+    // Move content up—startY is a small number so fields are closer to top
+    let estYStart = contentYStart + 10;
+    let evalYStart = contentYStart + 10;
+    drawFields(estFields, cardX + cardPadX + 4, estYStart, cardH - headerHeight - cardPadY * 2);
+    drawFields(evalFields, cardX + cardPadX * 2 + colWidth + 4, evalYStart, cardH - headerHeight - cardPadY * 2);
+
+    // --- Revised footer ---
+    const yFooter = pageHeight - 55;
+    const lineWidth = pageWidth / 2 - margin * 2;
+    const lineHeight = 1.2;
+    const sigImageWidth = 80;
+    const sigImageHeight = 26;
+    const sigPadding = 6;
+    
+    // Left signature line
+    const leftLineX = margin + 10;
+    const leftLineY = yFooter;
+    doc.setDrawColor(195, 202, 224);
+    doc.setLineWidth(lineHeight);
+    doc.line(leftLineX, leftLineY, leftLineX + lineWidth, leftLineY);
+
+    // Left label below line
+    doc.setFont(fontMain, 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(36,110,163);
+    doc.text("Print Name and Signature of Person in Charge", leftLineX, leftLineY + 14);
+
+    // Left signature image above line (if available)
+    try {
+      doc.addImage(document.getElementById('picSignature').toDataURL("image/png"), "PNG", leftLineX, leftLineY - sigImageHeight - sigPadding, sigImageWidth, sigImageHeight, undefined, 'FAST');
+    } catch {}
+
+    // Left printed name to right of signature image
+    doc.setFont(fontMain, 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(34, 51, 71);
+    doc.text(picPrint, leftLineX + sigImageWidth + 10, leftLineY - sigImageHeight / 2);
+
+    // Right signature line
+    const rightLineX = pageWidth / 2 + margin;
+    const rightLineY = yFooter;
+    doc.setDrawColor(195, 202, 224);
+    doc.setLineWidth(lineHeight);
+    doc.line(rightLineX, rightLineY, rightLineX + lineWidth, rightLineY);
+
+    // Right label below line
+    doc.setFont(fontMain, 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(36,110,163);
+    doc.text("Print Name and Signature of Food Safety Advisor", rightLineX, rightLineY + 14);
+
+    // Right signature image above line (if available)
+    try {
+      doc.addImage(document.getElementById('fsaSignature').toDataURL("image/png"), "PNG", rightLineX, rightLineY - sigImageHeight - sigPadding, sigImageWidth, sigImageHeight, undefined, 'FAST');
+    } catch {}
+
+    // Right printed name to right of signature image
+    doc.setFont(fontMain, 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(34, 51, 71);
+    doc.text(fsaPrint, rightLineX + sigImageWidth + 10, rightLineY - sigImageHeight / 2);
+  }
+
+  // --- PAGE 1 ---
+  let blockTop = margin + 145;
+  let tableFont = 6.9;
+  let cellPadY = 1.1; // decreased from 1.5
+  let tHeaderH = 13;
+  let colGap = 8;
+  let colW = (pageWidth - margin * 2 - colGap) / 2;
+  let totalTableWidth = colW * 2 + colGap;
+  let startX = (pageWidth - totalTableWidth) / 2 - 3.5;
+  let tWidths = [16, 34, colW - 74, 15, 15];
+
+  function renderTableSection(subcats, itemList, startXSection, startY, isGRP) {
+    let y = startY;
+    pdf.setFont(fontMain, "bold");
+    pdf.setFontSize(7.4);
+    pdf.setTextColor(36, 68, 140);
+    pdf.setFillColor(239, 245, 251);
+    pdf.rect(startXSection, y, tWidths.reduce((a, b) => a + b), tHeaderH, 'F');
+    pdf.text("#", startXSection + 7, y + 9);
+    pdf.text("Status", startXSection + tWidths[0] + 4, y + 9);
+    pdf.text("Description", startXSection + tWidths[0] + tWidths[1] + 7, y + 9);
+    pdf.setFontSize(6.0); // decreased font size for headers COS and R
+    pdf.text("COS", startXSection + tWidths[0] + tWidths[1] + tWidths[2] + 5, y + 9);
+    pdf.text("R", startXSection + tWidths[0] + tWidths[1] + tWidths[2] + tWidths[3] + 5, y + 9);
+    y += tHeaderH;
+
+    pdf.setFontSize(tableFont);
+
+    let altRowIdx = 0;
+
+    for(let s=0;s<subcats.length;s++) {
+      pdf.setFont(fontMain,"bold");
+      pdf.setFontSize(7.0);
+      pdf.setTextColor(65,86,144);
+      pdf.setFillColor(228,236,248);
+      pdf.rect(startXSection, y, tWidths.reduce((a,b)=>a+b), 11, 'F');
+      pdf.text(subcats[s].sub, startXSection + 7, y + 9);
+      y += 11;
+      pdf.setFont(fontMain,"normal");
+      pdf.setFontSize(tableFont);
+      pdf.setTextColor(31,60,110);
+
+      for(let idx=0; idx<subcats[s].ids.length; idx++) {
+        let id = subcats[s].ids[idx];
+        let item = itemList.find(it=>it.id===id);
+        if(!item) continue;
+        let d = getItemData(item.id);
+
+        let descMax = tWidths[2] - 7;
+        let prioLabel = `[${item.priority}] `;
+        let prioColorArr = prioColor(item.priority);
+        let descLines = pdf.splitTextToSize(prioLabel + item.desc, descMax);
+
+        let firstLine = descLines[0];
+        let prioWidth = pdf.getTextWidth(prioLabel);
+        let rowHeight = Math.max(12 + (descLines.length - 1) * 8, 15) + cellPadY * 2;
+        let rowY = y;
+
+        let isOut = d.status === "OUT";
+        let altBg = (altRowIdx % 2 === 0) ? [255,255,255] : [245,250,255];
+        let outBg = [255,230,230];
+        pdf.setFillColor(...(isOut ? outBg : altBg));
+        pdf.rect(startXSection, y, tWidths.reduce((a,b) => a + b), rowHeight, 'F');
+
+        // Draw borders for each cell
+        let cellX = startXSection;
+        for (let i = 0; i < tWidths.length; i++) {
+          pdf.setDrawColor(151,178,220);
+          pdf.setLineWidth(0.7);
+          pdf.rect(cellX, y, tWidths[i], rowHeight, 'S');
+          cellX += tWidths[i];
+        }
+
+        let baseY = y + cellPadY + 7;
+
+        pdf.setFont(fontMain, "bold");
+        pdf.setFontSize(tableFont + 0.1);
+        pdf.setTextColor(41,64,120);
+        pdf.text(String(item.id), startXSection + 5, baseY);
+
+        if (isGRP) {
+          pdf.setFont(fontMain, "bold");
+          pdf.setFontSize(tableFont + 1.2);
+          pdf.setTextColor(220,45,50);
+          pdf.text(d.status === "OUT" ? "X" : "", startXSection + tWidths[0] + 5, baseY);
+        } else {
+          let statusColor = d.status === "OUT" ? [220,45,50] : d.status === "IN" ? [21,115,42] : [132,132,132];
+          pdf.setFont(fontMain, "bold");
+          pdf.setFontSize(tableFont + 0.1);
+          pdf.setTextColor(...statusColor);
+          pdf.text(d.status || "", startXSection + tWidths[0] + 5, baseY);
+        }
+
+        let descX = startXSection + tWidths[0] + tWidths[1] + 6;
+        if (descLines.length) {
+          pdf.setFont(fontMain, "bold");
+          pdf.setFontSize(tableFont + 0.1);
+          pdf.setTextColor(...prioColorArr);
+          pdf.text(prioLabel, descX, baseY);
+          pdf.setFont(fontMain, "normal");
+          pdf.setTextColor(31,60,110);
+          pdf.text(firstLine.slice(prioLabel.length), descX + prioWidth, baseY);
+        }
+        for(let l = 1; l < descLines.length; l++) {
+          pdf.setFont(fontMain, "normal");
+          pdf.setFontSize(tableFont + 0.1);
+          pdf.setTextColor(31,60,110);
+          pdf.text(descLines[l], descX, baseY + l * 8);
+        }
+
+        pdf.setFont(fontMain, "bold");
+        pdf.setFontSize(tableFont + 1.3);
+        pdf.setTextColor(38,78,170);
+        if(d.cos){
+          pdf.text("X", startXSection + tWidths[0] + tWidths[1] + tWidths[2] + tWidths[3]/2, baseY, {align: 'center'});
+        }
+        if(d.r){
+          pdf.text("X", startXSection + tWidths[0] + tWidths[1] + tWidths[2] + tWidths[3] + tWidths[4]/2, baseY, {align: 'center'});
+        }
+        y += rowHeight;
+        altRowIdx++;
+      }
+    }
+    return y;
+  }
+
+  pdf.setFont(fontMain, "bold");
+  pdf.setFontSize(11.2);
+  pdf.setTextColor(36, 68, 140);
+  let y = blockTop;
+  pdf.text("Foodborne Illness Risk Factors and Public Health Interventions", pageWidth / 2, y, { align: 'center' });
+  pdf.setDrawColor(151, 178, 220);
+  pdf.setLineWidth(1.1);
+  pdf.line(startX, y + 3, startX + totalTableWidth, y + 3);
+  y += 11;
+
+  pdf.setFont(fontMain, 'normal');
+  pdf.setFontSize(7.2);
+  pdf.setTextColor(44,58,77);
+  pdf.text(
+    "IN = in compliance   OUT = out of compliance   N/A = not applicable   N/O = not observed   COS = corrected on-site   R = repeat violation",
+    pageWidth / 2, y + 4, {align: 'center'}
+  );
+  y += 9;
+  pdf.text(
+    "NC = non-critical violation   CV = critical violation   MA = major violation",
+    pageWidth / 2, y + 4, {align: 'center'}
+  );
+  y += 10;
+
+  let yL = renderTableSection(fbiSubcats.filter(s => s.ids[0] <= 15), items, startX, y, false);
+  let yR = renderTableSection(fbiSubcats.filter(s => s.ids[0] > 15), items, startX + colW + colGap, y, false);
+
+  let grpHeaderY = Math.max(yL, yR) + 15;
+  pdf.setFont(fontMain, "bold");
+  pdf.setFontSize(11.2);
+  pdf.text("Good Retail Practices", pageWidth / 2, grpHeaderY, { align: 'center' });
+  pdf.setDrawColor(151, 178, 220);
+  pdf.setLineWidth(1.1);
+  pdf.line(startX, grpHeaderY + 3, startX + totalTableWidth, grpHeaderY + 3);
+
+  pdf.setFont(fontMain, 'normal');
+  pdf.setFontSize(7.2);
+  pdf.setTextColor(44,58,77);
+  pdf.text(
+    "Good Retail Practices are preventative measures to control the addition of pathogens, chemicals, and physical objects into foods.\nMark off each numbered item that is not in compliance. Indicate the status for each numbered item (COS or R).",
+    pageWidth / 2, grpHeaderY + 10, {align: 'center', maxWidth: pageWidth - margin*2}
+  );
+
+  renderTableSection(grpSubcatsLeft, items, startX, grpHeaderY + 24, true);
+  renderTableSection(grpSubcatsRight, items, startX + colW + colGap, grpHeaderY + 24, true);
+
+  drawHeaderFooter(pdf, 1, 1);
+
+  // --- PAGE 2: Violations ---
+  const violationItems = [];
+  let totals = {OUT:0, NC:0, CV:0, MA:0};
+  items.forEach(item => {
+    let data = getItemData(item.id);
+    if (data.status === "OUT") {
+      violationItems.push({...item, ...data});
+      totals.OUT++;
+      totals[item.priority] = (totals[item.priority]||0) + 1;
+    }
+  });
+
+  if (violationItems.length > 0) {
+    pdf.addPage();
+    let thisPage = pdf.internal.getNumberOfPages();
+    drawHeaderFooter(pdf, thisPage, thisPage);
+    let vY = margin + 145;
+
+    pdf.setFont(fontMain, 'bold');
+    pdf.setFontSize(11.2);
+    pdf.setTextColor(41,64,102);
+    pdf.text("Violation Summary", pageWidth / 2, vY, { align:"center" });
+    vY += 10;
+
+    const badgeData = [
+      { label: 'NC',  value: totals.NC||0, color: [168,123,0], textColor: [255,255,255] },
+      { label: 'CV',  value: totals.CV||0, color: [180,70,4],  textColor: [255,255,255] },
+      { label: 'MA',  value: totals.MA||0, color: [175,0,0],   textColor: [255,255,255] }
+    ];
+    let badgeWidth = 42, badgeHeight = 28, badgeSpacing = 6;
+    let totalWidth = badgeData.length * badgeWidth + (badgeData.length - 1) * badgeSpacing;
+    let startXBadges = (pageWidth - totalWidth) / 2;
+    let badgeY = vY - 2;
+    badgeData.forEach((badge, i) => {
+      let x = startXBadges + i * (badgeWidth + badgeSpacing);
+      pdf.setFillColor(...badge.color);
+      pdf.roundedRect(x, badgeY, badgeWidth, badgeHeight, 12, 12, 'F');
+      pdf.setFont(fontMain, 'bolditalic');
+      pdf.setFontSize(13);
+      pdf.setTextColor(...badge.textColor);
+      pdf.text(String(badge.value), x + badgeWidth/2, badgeY + 10, {align:'center', baseline:'middle'});
+      pdf.setFont(fontMain, 'bold');
+      pdf.setFontSize(9);
+      pdf.setTextColor(...badge.textColor);
+      pdf.text(badge.label, x + badgeWidth/2, badgeY + 26, {align:'center', baseline:'bottom'});
+    });
+    vY = badgeY + badgeHeight + 15;
+    pdf.setDrawColor(151,178,220);
+    pdf.setLineWidth(1.1);
+    pdf.line(margin, vY, pageWidth - margin, vY);
+    vY += 10;
+
+    violationItems.forEach((v, idx) => {
+      if (vY > pageHeight - 110) {
+        pdf.addPage();
+        drawHeaderFooter(pdf, pdf.internal.getNumberOfPages(), pdf.internal.getNumberOfPages());
+        vY = margin + 130;
+      }
+      let left = margin + 8, cardW = pageWidth - margin * 2 - 16;
+      pdf.setFillColor(245,247,251);
+      pdf.roundedRect(left, vY, cardW, 18, 4, 4, 'F');
+
+      pdf.setFont(fontMain,'bold');
+      pdf.setFontSize(9.6);
+      pdf.setTextColor(31,60,110);
+      pdf.text(`#${v.id}`, left + 10, vY + 13);
+
+      let prioBadge = `[${v.priority}]`;
+      let cosr = [];
+      if(v.cos) cosr.push("COS");
+      if(v.r) cosr.push("R");
+      let prioText = prioBadge + (cosr.length ? ` (${cosr.join(" / ")})` : "");
+
+      pdf.setFont(fontMain,'bold');
+      pdf.setFontSize(9.4);
+      pdf.setTextColor(...prioColor(v.priority));
+      pdf.text(prioText, left + 38, vY + 13);
+
+      pdf.setFont(fontMain,'bold');
+      pdf.setFontSize(9.4);
+      pdf.setTextColor(41,64,102);
+      let descMax = cardW - 140;
+      let descLines = pdf.splitTextToSize(v.desc, descMax);
+      pdf.text(descLines, left + 105, vY + 13);
+
+      let commLines = ((v.comment||"").trim().length > 0) ? pdf.splitTextToSize(v.comment, descMax - 12) : [];
+      if(commLines.length > 0){
+        pdf.setFont(fontMain,'normal');
+        pdf.setFontSize(8.1);
+        pdf.setTextColor(95,102,112);
+        pdf.text(commLines, left + 105, vY + 20 + descLines.length * 9);
+        vY += 13 + commLines.length * 9;
+      }
+      vY += Math.max(18, descLines.length * 11) + 3;
+    });
+  }
+
+  // --- PAGE 3: Remarks ---
+  let showRemarks = (remarks && remarks.length > 0);
+  if (showRemarks) {
+    pdf.addPage();
+    let pageNum = pdf.internal.getNumberOfPages();
+    drawHeaderFooter(pdf, pageNum, pageNum);
+    let rY = margin + 145;
+
+    // Heading styled like other pages
+    pdf.setFont(fontMain, 'bold');
+    pdf.setFontSize(11.2);
+    pdf.setTextColor(41,64,102);
+    pdf.text("Remarks and Observations", pageWidth / 2, rY, { align: 'center' });
+    rY += 10;
+
+    // Horizontal line below heading
+    pdf.setDrawColor(151, 178, 220);
+    pdf.setLineWidth(1.2);
+    pdf.line(margin, rY, pageWidth - margin, rY);
+    rY += 11;
+
+    // Remarks text in light grey
+    pdf.setFont(fontMain, 'normal');
+    pdf.setFontSize(10);
+    pdf.setTextColor(140, 140, 140);
+
+    let remarksLines = pdf.splitTextToSize(remarks, pageWidth - margin * 2 - 8);
+    let textY = rY;
+    for (let i = 0; i < remarksLines.length; i++) {
+      if (textY > pageHeight - margin - 10) {
+        pdf.addPage();
+        drawHeaderFooter(pdf, pdf.internal.getNumberOfPages(), pdf.internal.getNumberOfPages());
+        textY = margin + 55;
+      }
+      pdf.text(remarksLines[i], margin + 4, textY);
+      textY += 18;
+    }
+  }
+
+  // Finalize header/footers for all pages
+  let pageCount = pdf.internal.getNumberOfPages();
+  for(let p=1; p <= pageCount; p++) {
+    pdf.setPage(p);
+    drawHeaderFooter(pdf, p, pageCount);
+  }
+
+  // Save
+  const rand6 = Math.floor(100000 + Math.random() * 900000);
+  const rand2 = Math.floor(10 + Math.random() * 90);
+  const date = document.getElementById('evalDate').value || new Date().toISOString().slice(0, 10);
+  const filename = `Inspection_${date}-${rand6}-${rand2}.pdf`;
+  pdf.save(filename);
+});
+  </script>
+  <!-- Form autosave/restore -->
+  <script>
+    // --- AUTO-SAVE/RESTORE FORM DATA ---
+    // All input/select/textarea fields in the form, including dynamically rendered items
+    const form = document.getElementById('inspectionForm');
+    const STORAGE_KEY = 'inspectionFormData_v1';
+
+    // Helper: get all relevant input/select/textarea fields
+    function getFormFields() {
+      // Only inputs with name attribute to avoid buttons, etc.
+      return form.querySelectorAll('input[name], select[name], textarea[name]');
+    }
+
+    // Restore on load
+    window.addEventListener('DOMContentLoaded', () => {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (data) {
+        const obj = JSON.parse(data);
+        getFormFields().forEach(el => {
+          if (el.type === 'checkbox') {
+            el.checked = !!obj[el.name];
+          } else if (el.type === 'radio') {
+            if (obj[el.name] === el.value) el.checked = true;
+          } else {
+            el.value = obj[el.name] || '';
+          }
+        });
+      }
+    });
+
+    // Save on input change
+    form.addEventListener('input', () => {
+      const obj = {};
+      getFormFields().forEach(el => {
+        if (el.type === 'checkbox') {
+          obj[el.name] = el.checked;
+        } else if (el.type === 'radio') {
+          if (el.checked) obj[el.name] = el.value;
+        } else {
+          obj[el.name] = el.value;
+        }
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    });
+
+    // Optional: clear storage on submit
+    form.addEventListener('submit', function(e) {
+      // If you want to keep the data after submit, remove the next line.
+      localStorage.removeItem(STORAGE_KEY);
+    });
+  </script>
+</body>
+</html>
